@@ -1,0 +1,81 @@
+class Empleado:
+    def __init__(self, nombre, sueldo_base):
+        self.nombre = nombre
+        self.__sueldo_base = sueldo_base
+
+    def get_sueldo_base(self):
+        return self.__sueldo_base
+
+    def set_sueldo_base(self, nuevo_sueldo):
+        if nuevo_sueldo >= 0:
+            self.__sueldo_base = nuevo_sueldo
+        else:
+            print("El sueldo no puede ser negativo.")
+
+    def calcular_salario(self):
+        pass
+
+class EmpleadoFijo(Empleado):
+    def calcular_salario(self):
+        return self.get_sueldo_base()
+
+class EmpleadoPorHoras(Empleado):
+    def __init__(self, nombre, sueldo_base, horas_trabajadas):
+        super().__init__(nombre, sueldo_base)
+        self.horas_trabajadas = horas_trabajadas
+
+    def calcular_salario(self):
+        return self.get_sueldo_base() * self.horas_trabajadas
+
+class EmpleadoTemporal(Empleado):
+    def __init__(self, nombre, sueldo_base, bono):
+        super().__init__(nombre, sueldo_base)
+        self.bono = bono
+
+    def calcular_salario(self):
+        return self.get_sueldo_base() + self.bono
+
+
+def crear_empleado():
+    empleados = []
+    while True:
+        print("\nSeleccione tipo de empleado a crear:")
+        print("1 - Empleado Fijo")
+        print("2 - Empleado Por Horas")
+        print("3 - Empleado Temporal")
+        print("4 - Mostrar salarios y salir")
+
+        opcion = input("Ingrese opción (1-4): ")
+
+        if opcion == "1":
+            nombre = input("Nombre del empleado fijo: ")
+            sueldo = float(input("Sueldo base mensual: "))
+            emp = EmpleadoFijo(nombre, sueldo)
+            empleados.append(emp)
+            print(f"Empleado fijo {nombre} creado.")
+
+        elif opcion == "2":
+            nombre = input("Nombre del empleado por horas: ")
+            sueldo = float(input("Pago por hora: "))
+            horas = float(input("Horas trabajadas: "))
+            emp = EmpleadoPorHoras(nombre, sueldo, horas)
+            empleados.append(emp)
+            print(f"Empleado por horas {nombre} creado.")
+
+        elif opcion == "3":
+            nombre = input("Nombre del empleado temporal: ")
+            sueldo = float(input("Sueldo base: "))
+            bono = float(input("Bono adicional: "))
+            emp = EmpleadoTemporal(nombre, sueldo, bono)
+            empleados.append(emp)
+            print(f"Empleado temporal {nombre} creado.")
+
+        elif opcion == "4":
+            print("\nCalculando salarios...\n")
+            for empleado in empleados:
+                print(f"{empleado.nombre} gana ${empleado.calcular_salario():.2f} este mes.")
+            break
+        else:
+            print("Opción no válida, intente de nuevo.")
+
+crear_empleado()

@@ -1,0 +1,41 @@
+# Defino la clase base Transporte, que otras clases van a heredar
+class Transporte:
+    def tipo_transporte(self):
+        print("Este es un tipo de transporte.")
+
+# Cada clase hija define su propia versión del método tipo_transporte
+class Coche(Transporte):
+    def tipo_transporte(self):
+        print("El coche es un transporte terrestre.")
+
+class Avion(Transporte):
+    def tipo_transporte(self):
+        print("El avión es un transporte aéreo.")
+
+class Barco(Transporte):
+    def tipo_transporte(self):
+        print("El barco es un transporte marítimo.")
+
+# Bucle que se repite hasta que el usuario escriba "salir"
+while True:
+    print("\nElige un tipo de transporte: coche, avión o barco. (Escribe 'salir' para terminar)")
+    eleccion = input("Escribe tu elección: ").lower()
+
+    # Si el usuario quiere salir, rompemos el bucle
+    if eleccion == "salir":
+        print("Programa finalizado.")
+        break
+
+    # Según la elección, se crea una instancia del transporte correspondiente
+    if eleccion == "coche":
+        transporte = Coche()
+    elif eleccion == "avion" or eleccion == "avión":
+        transporte = Avion()
+    elif eleccion == "barco":
+        transporte = Barco()
+    else:
+        print("Opción no válida. Por favor escribe: coche, avión o barco.")
+        continue  # vuelve a preguntar si no se ingresó una opción válida
+
+    # Aquí se llama al método correspondiente, según la clase que se haya creado
+    transporte.tipo_transporte()

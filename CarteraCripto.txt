@@ -1,0 +1,66 @@
+class CarteraCripto:
+    def __init__(self, usuario):
+        self.__usuario = usuario
+        self.__saldo_btc = 0.0  # Empieza en cero
+
+    def consultar_saldo(self):
+        return self.__saldo_btc
+
+    def comprar_btc(self, monto_usd, precio_actual_btc):
+        btc_comprados = monto_usd / precio_actual_btc
+        self.__saldo_btc += btc_comprados
+        return btc_comprados
+
+    def vender_btc(self, monto_btc, precio_actual_btc):
+        if monto_btc <= self.__saldo_btc:
+            self.__saldo_btc -= monto_btc
+            monto_usd = monto_btc * precio_actual_btc
+            return monto_usd
+        else:
+            raise ValueError("No tienes suficiente BTC para vender.")
+
+
+# -------------------- PROGRAMA PRINCIPAL --------------------
+try:
+    usuario = input("Ingrese el nombre del usuario de la cartera cripto: ")
+    cartera = CarteraCripto(usuario)
+
+    while True:
+        print("\n--- Menú ---")
+        print("1. Consultar saldo")
+        print("2. Comprar BTC")
+        print("3. Vender BTC")
+        print("4. Salir")
+
+        opcion = input("Seleccione una opción: ")
+
+        if opcion == '1':
+            print(f"Saldo actual en BTC: {cartera.consultar_saldo():.8f}")
+
+        elif opcion == '2':
+            try:
+                usd = float(input("Ingrese monto en USD para comprar BTC: "))
+                precio = float(input("Ingrese precio actual del BTC (USD): "))
+                btc = cartera.comprar_btc(usd, precio)
+                print(f"Has comprado {btc:.8f} BTC.")
+            except ValueError:
+                print("Entrada inválida. Asegúrate de ingresar números.")
+
+        elif opcion == '3':
+            try:
+                btc = float(input("Ingrese la cantidad de BTC que quiere vender: "))
+                precio = float(input("Ingrese precio actual del BTC (USD): "))
+                usd = cartera.vender_btc(btc, precio)
+                print(f"Has vendido {btc:.8f} BTC y recibirás ${usd:.2f} USD.")
+            except ValueError as e:
+                print(f"Error: {e}")
+
+        elif opcion == '4':
+            print("¡Hasta luego!")
+            break
+
+        else:
+            print("Opción no válida. Intenta de nuevo.")
+
+except Exception as e:
+    print(f"Ocurrió un error: {e}")

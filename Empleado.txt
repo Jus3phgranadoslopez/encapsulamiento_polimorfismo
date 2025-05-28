@@ -1,0 +1,73 @@
+class Empleado:
+    def __init__(self, nombre, rol, clave_acceso):
+        self.__nombre = nombre
+        self.__rol = rol
+        self.__clave_acceso = self.__cifrar(clave_acceso)
+
+    @property
+    def nombre(self):
+        return self.__nombre
+
+    @property
+    def rol(self):
+        return self.__rol
+
+    def __cifrar(self, clave):
+        # "Cifrado" básico: invertir la cadena
+        return clave[::-1]
+
+    def verificar_clave(self, clave_ingresada):
+        # Comparo la clave cifrada con la ingresada cifrada
+        return self.__cifrar(clave_ingresada) == self.__clave_acceso
+
+    def cambiar_clave(self, clave_antigua, nueva_clave):
+        if self.verificar_clave(clave_antigua):
+            self.__clave_acceso = self.__cifrar(nueva_clave)
+            return True
+        else:
+            return False
+
+
+#Programa principal
+print("=== Sistema de seguridad de empleados ===")
+
+nombre = input("Nombre del empleado: ")
+rol = input("Rol del empleado: ")
+clave = input("Cree una clave de acceso: ")
+
+empleado = Empleado(nombre, rol, clave)
+
+while True:
+    print("\n--- Menú ---")
+    print("1. Verificar clave")
+    print("2. Cambiar clave")
+    print("3. Ver datos")
+    print("4. Salir")
+
+    opcion = input("Seleccione una opción: ")
+
+    if opcion == "1":
+        intento = input("Ingrese su clave: ")
+        if empleado.verificar_clave(intento):
+            print("✅ Clave correcta.")
+        else:
+            print("❌ Clave incorrecta.")
+
+    elif opcion == "2":
+        actual = input("Ingrese la clave actual: ")
+        nueva = input("Ingrese la nueva clave: ")
+        if empleado.cambiar_clave(actual, nueva):
+            print("🔒 Clave actualizada correctamente.")
+        else:
+            print("❌ Clave actual incorrecta. No se cambió nada.")
+
+    elif opcion == "3":
+        print(f"Nombre: {empleado.nombre}")
+        print(f"Rol: {empleado.rol}")
+
+    elif opcion == "4":
+        print("Sesión cerrada.")
+        break
+
+    else:
+        print("Opción no válida.")

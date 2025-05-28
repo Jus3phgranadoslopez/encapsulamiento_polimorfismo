@@ -1,0 +1,125 @@
+class Persona:
+    def __init__(self, nombre, edad, documento):
+        self.__nombre = nombre
+        self.__edad = None
+        self.edad = edad  # validador
+        self.__documento = documento
+
+    @property
+    def nombre(self):
+        return self.__nombre
+
+    @property
+    def edad(self):
+        return self.__edad
+
+    @edad.setter
+    def edad(self, valor):
+        if valor >= 0:
+            self.__edad = valor
+        else:
+            raise ValueError("La edad no puede ser negativa.")
+
+    @property
+    def documento(self):
+        return self.__documento
+
+
+class Paciente(Persona):
+    def __init__(self, nombre, edad, documento, diagnostico):
+        super().__init__(nombre, edad, documento)
+        self.__diagnostico = diagnostico
+        self.__historial = []
+
+    def agregar_historial(self, entrada):
+        self.__historial.append(entrada)
+
+    def ver_historial(self):
+        return self.__historial
+
+    def ver_diagnostico(self):
+        return self.__diagnostico
+
+    def actualizar_diagnostico(self, nuevo):
+        self.__diagnostico = nuevo
+
+
+class Doctor(Persona):
+    def __init__(self, nombre, edad, documento, especialidad):
+        super().__init__(nombre, edad, documento)
+        self.__especialidad = especialidad
+
+    def ver_especialidad(self):
+        return self.__especialidad
+
+    def modificar_diagnostico(self, paciente, nuevo_diagnostico):
+        if isinstance(paciente, Paciente):
+            paciente.actualizar_diagnostico(nuevo_diagnostico)
+            return True
+        return False
+
+
+#Programa principal
+print("=== Sistema de hospital ===")
+
+# Crear paciente
+print("\n--- Registro del paciente ---")
+nombre_p = input("Nombre: ")
+edad_p = int(input("Edad: "))
+doc_p = input("Documento: ")
+diag_p = input("Diagnóstico inicial: ")
+paciente = Paciente(nombre_p, edad_p, doc_p, diag_p)
+
+# Crear doctor
+print("\n--- Registro del doctor ---")
+nombre_d = input("Nombre: ")
+edad_d = int(input("Edad: "))
+doc_d = input("Documento: ")
+esp_d = input("Especialidad: ")
+doctor = Doctor(nombre_d, edad_d, doc_d, esp_d)
+
+# Menú principal
+while True:
+    print("\n--- Menú ---")
+    print("1. Ver historial del paciente")
+    print("2. Agregar entrada al historial")
+    print("3. Ver diagnóstico actual")
+    print("4. Modificar diagnóstico (doctor)")
+    print("5. Ver especialidad del doctor")
+    print("6. Salir")
+
+    opcion = input("Seleccione una opción: ")
+
+    if opcion == "1":
+        historial = paciente.ver_historial()
+        if historial:
+            print("Historial médico:")
+            for entrada in historial:
+                print(f"- {entrada}")
+        else:
+            print("El historial está vacío.")
+
+    elif opcion == "2":
+        entrada = input("Nueva entrada médica: ")
+        paciente.agregar_historial(entrada)
+        print("Entrada agregada al historial.")
+
+    elif opcion == "3":
+        print("Diagnóstico actual:", paciente.ver_diagnostico())
+
+    elif opcion == "4":
+        nuevo_diag = input("Nuevo diagnóstico: ")
+        if doctor.modificar_diagnostico(paciente, nuevo_diag):
+            print("Diagnóstico actualizado.")
+        else:
+            print("Error: no se pudo actualizar el diagnóstico.")
+
+    elif opcion == "5":
+        print("Especialidad del doctor:", doctor.ver_especialidad())
+
+    elif opcion == "6":
+        print("Cerrando sistema hospitalario.")
+        break
+
+    else:
+        print("Opción no válida.")

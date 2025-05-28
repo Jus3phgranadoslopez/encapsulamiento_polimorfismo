@@ -1,0 +1,72 @@
+class Estudiante:
+    def __init__(self, nombre, codigo):
+        self.__nombre = None
+        self.__codigo = None
+        self.nombre = nombre  # Uso el setter para validar
+        self.codigo = codigo
+        self.__notas = []
+
+    @property
+    def nombre(self):
+        return self.__nombre
+
+    @nombre.setter
+    def nombre(self, valor):
+        if valor.strip():
+            self.__nombre = valor
+        else:
+            raise ValueError("El nombre no puede estar vacío.")
+
+    @property
+    def codigo(self):
+        return self.__codigo
+
+    @codigo.setter
+    def codigo(self, valor):
+        if valor.isalnum():
+            self.__codigo = valor
+        else:
+            raise ValueError("El código debe ser alfanumérico.")
+
+    def agregar_nota(self, nota):
+        if 0.0 <= nota <= 5.0:
+            self.__notas.append(nota)
+        else:
+            raise ValueError("La nota debe estar entre 0.0 y 5.0.")
+
+    def calcular_promedio(self):
+        if self.__notas:
+            return sum(self.__notas) / len(self.__notas)
+        return 0.0
+
+    def es_aprobado(self):
+        return self.calcular_promedio() >= 3.0
+
+
+# Programa principal que pide datos al usuario
+try:
+    nombre = input("Ingrese el nombre del estudiante: ")
+    codigo = input("Ingrese el código del estudiante (alfanumérico): ")
+    estudiante = Estudiante(nombre, codigo)
+
+    while True:
+        entrada = input("Ingrese una nota (o escriba 'fin' para terminar): ")
+        if entrada.lower() == 'fin':
+            break
+        try:
+            nota = float(entrada)
+            estudiante.agregar_nota(nota)
+        except ValueError as ve:
+            print(f"Error: {ve}")
+
+    promedio = estudiante.calcular_promedio()
+    aprobado = estudiante.es_aprobado()
+
+    print("\nResumen del estudiante:")
+    print(f"Nombre: {estudiante.nombre}")
+    print(f"Código: {estudiante.codigo}")
+    print(f"Promedio: {promedio:.2f}")
+    print("Estado: Aprobado" if aprobado else "Estado: Reprobado")
+
+except ValueError as e:
+    print(f"Error al crear el estudiante: {e}")
